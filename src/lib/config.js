@@ -1,4 +1,3 @@
-// variables: key, label, description, default direction (+1 more is better, -1 less is better)
 export const VARS = [
 	{ key: "kids_5_14_km2", group: "Demographics", label: "Kid density", desc: "More kids per km² (more fun? more competition?)", dir: 1, fmt: v => `${Math.round(v)}/km²` },
 	{ key: "hh_kids_pct", group: "Demographics", label: "Family households", desc: "% of households with children (more decorations?)", dir: 1, fmt: v => `${v.toFixed(1)}%` },
@@ -9,9 +8,6 @@ export const VARS = [
 	{ key: "car_pct", group: "Traffic safety", label: "Car trips", desc: "% of local residents' trips by car (fewer cars = safer streets)", dir: -1, fmt: v => `${Math.round(v)}%` },
 ];
 
-// per-theme map style, score ramp + overlay colours.
-// best hexes get the colour that contrasts most with the basemap:
-// dark = purple -> blood red -> pumpkin -> candle; light = flipped, cream -> pumpkin -> deep purple
 export const THEMES = {
 	dark: {
 		style: "map-style-dark.json", icon: "🕯️",
@@ -35,7 +31,6 @@ export const THEMES = {
 	},
 };
 
-// starting weights (relative; normalised to sum to 1, so displayed % match after rounding)
 export const DEFAULT_WEIGHTS = {
 	kids_5_14_km2: 7, hh_kids_pct: 7, income: 2,
 	parcel_mean_m2: 10, slope_res_pct: 25,

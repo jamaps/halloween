@@ -1,4 +1,3 @@
-// percentile rank (0-1) of each value within its column; missing values sit at 0.5 (neutral)
 export function percentiles(values) {
 	const order = Array.from(values.keys()).filter(i => values[i] != null).sort((a, b) => values[a] - values[b]);
 	const out = new Float32Array(values.length).fill(0.5);
@@ -13,8 +12,6 @@ export function percentiles(values) {
 	return out;
 }
 
-// weighted sum of each variable's percentile (flipped where less is better), then
-// the percentile of that score
 export function computeScores(pct, weights, dirs, n) {
 	const score = new Float32Array(n);
 	for (let v = 0; v < weights.length; v++) {

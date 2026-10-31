@@ -10,24 +10,21 @@
 	import { RecentreControl, NorthArrowControl } from "./controls.js";
 
 	export let weights;
-	export let dirs;
 	export let theme;
 
 	const BEARING = -17;
+	const dirs = VARS.map(v => v.dir);
 
 	let container;
 	let map;
-	let mapTheme = null;  // theme of the style currently on the map
+	let mapTheme = null;
 	let loaded = false;
 	let status = "summoning hexes…";
 
 	let features = [], geo = null, pct = [], scorePct = null;
-	let boundaryCoords = [];  // city outline vertices, for framing
-	let hoverId = null;  // null = nothing yet, -1 = off the hexes
+	let boundaryCoords = [];
+	let hoverId = null;
 
-	// frame the city boundary tightly at the tilted bearing (fitBounds would fit the
-	// axis-aligned box, leaving uneven gaps): place the camera, measure the outline's
-	// screen extent, then rescale + recentre - exact in one pass at a fixed bearing
 	function fitToronto(animate = false) {
 		const before = { center: map.getCenter(), zoom: map.getZoom(), bearing: map.getBearing(), padding: map.getPadding() };
 		const phone = window.innerWidth <= 700;
@@ -35,7 +32,6 @@
 			? { top: 16, bottom: window.innerHeight * 0.48 + 8, left: 16, right: 16 }
 			: { top: 24, bottom: 24, left: 372, right: 24 };
 
-		// phones: the whole city is too small to read, so open on central Toronto instead
 		if (phone) {
 			const view = { center: [-79.4, 43.715], zoom: 10, bearing: BEARING, padding };
 			if (animate) map.easeTo({ ...view, duration: 800 });
@@ -57,7 +53,6 @@
 		const zoom = 10 + Math.log2(Math.min(w / (x1 - x0), h / (y1 - y0)));
 		const center = map.unproject([(x0 + x1) / 2, (y0 + y1) / 2]);
 		if (animate) {
-			// measuring moved the camera; restore it (same frame, no flicker) and glide instead
 			map.jumpTo(before);
 			map.easeTo({ center, zoom, bearing: BEARING, padding, duration: 800 });
 		} else {
@@ -65,7 +60,6 @@
 		}
 	}
 
-	// OSM shortbread vector tiles, light / dark versions of the libraries-by-transit tour style
 	const styleCache = {};
 	async function getStyle(name) {
 		if (!styleCache[name]) styleCache[name] = await fetch(`${base}/${THEMES[name].style}`).then(r => r.json());
@@ -97,10 +91,9 @@
 		});
 	}
 
-	$: weights, dirs, scheduleUpdate();
+	$: weights, scheduleUpdate();
 	$: setMapTheme(theme);
 
-	// refit only when crossing the phone / desktop layout breakpoint
 	let wasPhone;
 	function onResize() {
 		const phone = window.innerWidth <= 700;
@@ -109,7 +102,6 @@
 
 	onMount(() => {
 		wasPhone = window.innerWidth <= 700;
-		// the page sets `theme` after this mounts, so read the saved one directly
 		const initialTheme = THEMES[document.documentElement.dataset.theme] ? document.documentElement.dataset.theme : "dark";
 
 		Promise.all([
@@ -130,17 +122,17 @@
 				style,
 				center: [-79.386783, 43.700203],
 				zoom: 10,
-				minZoom: 8,  // phones need < 9 to frame the whole city
+				minZoom: 8,
 				maxZoom: 17,
 				bearing: BEARING,
 				dragRotate: false,
 				touchPitch: false,
-				attributionControl: false,  // credited in the panel note
+				attributionControl: false,
 			});
 			map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
 			map.addControl(new RecentreControl(() => fitToronto(true)), "top-right");
 			map.addControl(new maplibregl.ScaleControl({ maxWidth: 100, unit: "metric" }), "bottom-right");
-			map.addControl(new NorthArrowControl(), "bottom-right");  // added after, so it stacks above the scale
+			map.addControl(new NorthArrowControl(), "bottom-right");
 
 			map.on("load", () => {
 				addOverlays(map, THEMES[mapTheme], geo, base);
@@ -148,11 +140,8 @@
 				scheduleUpdate();
 				status = null;
 				loaded = true;
-				// the theme may have been toggled while loading
 				setMapTheme(theme);
 			});
-
-			// ---------- hover ----------
 
 			const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 10, maxWidth: "260px" });
 
@@ -167,7 +156,7 @@
 				const f = map.queryRenderedFeatures(e.point, { layers: ["hex-fill"] })[0];
 				const id = f ? f.id : -1;
 				popup.setLngLat(e.lngLat);
-				if (id === hoverId) return;  // same hex (or still off-hex): just move the card
+				if (id === hoverId) return;
 				setHover(id);
 				if (!f) {
 					map.getCanvas().style.cursor = "";
@@ -184,13 +173,11 @@
 						<span>${v.label}</span><span class="pop-val">${missing ? "no data" : v.fmt(val)}</span>
 						<div class="pop-bar"><span style="width:${missing ? 0 : Math.round(p * 100)}%"></span></div></div>`;
 				}).join("");
-				// upper half reads "Top X%", lower half "Bottom X%" (clearer than "Top 98%")
 				const rank = s >= 0.5 ? `Top ${Math.max(1, Math.round((1 - s) * 100))}%` : `Bottom ${Math.max(1, Math.round(s * 100))}%`;
 				popup.setHTML(`<div class="pop-score">${rank}</div>${rows}`).addTo(map);
 			});
 			map.getCanvas().addEventListener("mouseleave", () => {
-				setHover(-1);
-				hoverId = null;
+				setHover(null);
 				popup.remove();
 			});
 		}).catch(err => {
@@ -212,7 +199,6 @@
 <style>
 	#map { position: absolute; inset: 0; }
 
-	/* vignette */
 	#map::after {
 		content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1;
 		background: radial-gradient(ellipse at 55% 50%, transparent 55%, var(--vignette) 100%);
@@ -223,7 +209,6 @@
 		font-family: Creepster, cursive; font-size: 28px; color: var(--pumpkin); background: var(--bg);
 	}
 
-	/* popup + controls are built by maplibre, outside this component's markup */
 	:global(.maplibregl-popup-content) {
 		background: var(--popup); color: var(--text); border: 1px solid var(--line); border-radius: 0;
 		padding: 10px 12px; font-family: "Open Sans", sans-serif; font-size: 12px; min-width: 210px;
@@ -234,9 +219,8 @@
 	:global(.maplibregl-popup-content:has(.pop-empty)) { min-width: 0; }
 	:global(.pop-row) { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; margin: 3px 0; }
 	:global(.pop-val) { font-variant-numeric: tabular-nums; text-align: right; }
-	:global(.pop-bar) { grid-column: 1 / -1; height: 3px; background: var(--track); border-radius: 0; }
-	:global(.pop-bar span) { display: block; height: 100%; border-radius: 0; background: var(--pumpkin); }
-	/* zoom buttons follow the theme */
+	:global(.pop-bar) { grid-column: 1 / -1; height: 3px; background: var(--track); }
+	:global(.pop-bar span) { display: block; height: 100%; background: var(--pumpkin); }
 	:global(.maplibregl-ctrl-group) { background: var(--panel); border: 1px solid var(--line); box-shadow: none !important; border-radius: 0 !important; }
 	:global(.maplibregl-ctrl-group button) { border-radius: 0 !important; }
 	:global(.maplibregl-ctrl-group button.recentre) { display: grid; place-items: center; color: var(--text); }

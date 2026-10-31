@@ -1,4 +1,3 @@
-// "re-centre on Toronto" button, styled like the zoom buttons and stacked under them
 export class RecentreControl {
 	constructor(onClick) { this.onClick = onClick; }
 	onAdd() {
@@ -14,7 +13,6 @@ export class RecentreControl {
 	onRemove() { this.el.remove(); }
 }
 
-// small north arrow, tilted with the map so it points to true north
 export class NorthArrowControl {
 	onAdd(m) {
 		this.map = m;

@@ -4,13 +4,9 @@
 	import HalloweenMap from "$lib/HalloweenMap.svelte";
 	import { VARS, THEMES, DEFAULT_WEIGHTS } from "$lib/config.js";
 
-	const N = VARS.length;
-
 	const defaultTotal = VARS.reduce((a, v) => a + DEFAULT_WEIGHTS[v.key], 0);
 	let weights = VARS.map(v => DEFAULT_WEIGHTS[v.key] / defaultTotal);
-	let dirs = VARS.map(v => v.dir);
 
-	// the saved theme is applied to <html> before first paint (see app.html); pick it up here
 	let theme = "dark";
 	onMount(() => {
 		const t = document.documentElement.dataset.theme;
@@ -23,17 +19,15 @@
 		try { localStorage.setItem("tot-theme", theme); } catch (e) {}
 	}
 
-	// set one weight, rescale the others proportionally so the total stays 1
 	function setWeight(i, v) {
 		const othersSum = 1 - weights[i];
 		const target = 1 - v;
 		weights = weights.map((w, j) => {
 			if (j === i) return v;
-			return othersSum > 1e-9 ? w * target / othersSum : target / (N - 1);
+			return othersSum > 1e-9 ? w * target / othersSum : target / (VARS.length - 1);
 		});
 	}
 
-	// slider thumb changes with the weight: 0% skull, 1-24 pumpkin, 25-49 zombie, 50-74 goblin, 75+ ogre
 	function thumbClass(pctW) {
 		if (pctW === 0) return "off";
 		if (pctW >= 75) return "ogre";
@@ -60,10 +54,10 @@
 	<meta name="twitter:card" content="summary_large_image" />
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-	<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </svelte:head>
 
-<HalloweenMap {weights} {dirs} {theme} />
+<HalloweenMap {weights} {theme} />
 
 <div id="panel">
 	<div class="title-row">
@@ -78,32 +72,29 @@
 		<div class="ramp-labels"><span>meh</span><span>better</span><span>great!</span></div>
 	</div>
 
-	<div>
-		{#each VARS as v, i}
-			{@const pctW = Math.round(weights[i] * 100)}
-			{#if i === 0 || VARS[i - 1].group !== v.group}
-				<h2 class="group">{v.group}</h2>
-			{/if}
-			<div class="var">
-				<div class="var-head">
-					<span class="var-name">{v.label}</span>
-					<span class="var-weight">{pctW}%</span>
-				</div>
-				<div class="var-desc" id="desc-{v.key}">{v.desc}</div>
-				<!-- screen-reader name + description (not visible on the page) -->
-				<input
-					type="range" min="0" max="100" step="1"
-					class={thumbClass(pctW)}
-					style:--p="{pctW}%"
-					value={pctW}
-					aria-label={v.label}
-					aria-describedby="desc-{v.key}"
-					aria-valuetext="{pctW}%"
-					on:input={e => setWeight(i, e.currentTarget.value / 100)}
-				>
+	{#each VARS as v, i}
+		{@const pctW = Math.round(weights[i] * 100)}
+		{#if i === 0 || VARS[i - 1].group !== v.group}
+			<h2 class="group">{v.group}</h2>
+		{/if}
+		<div class="var">
+			<div class="var-head">
+				<span class="var-name">{v.label}</span>
+				<span class="var-weight">{pctW}%</span>
 			</div>
-		{/each}
-	</div>
+			<div class="var-desc" id="desc-{v.key}">{v.desc}</div>
+			<input
+				type="range" min="0" max="100" step="1"
+				class={thumbClass(pctW)}
+				style:--p="{pctW}%"
+				value={pctW}
+				aria-label={v.label}
+				aria-describedby="desc-{v.key}"
+				aria-valuetext="{pctW}%"
+				on:input={e => setWeight(i, e.currentTarget.value / 100)}
+			>
+		</div>
+	{/each}
 
 	<p class="note">
 		This is a just-for-fun Halloween map, so please don't take it too seriously. Every neighbourhood has its own tricks and treats that aren't captured by this data. 👻
@@ -121,18 +112,16 @@
 <style>
 	#panel {
 		position: absolute; top: 16px; left: 16px; bottom: 16px; width: 340px; z-index: 2;
-		background: var(--panel); border: 1px solid var(--line); border-radius: 0;
+		background: var(--panel); border: 1px solid var(--panel-border);
 		backdrop-filter: blur(6px); overflow-y: auto; padding: 18px 18px 14px;
 		box-shadow: 0 0 40px var(--panel-glow);
-		/* thin themed scrollbar (standard props; Chrome 121+ / Firefox) */
 		scrollbar-width: thin;
 		scrollbar-color: var(--line) transparent;
 	}
 	#panel:hover { scrollbar-color: color-mix(in srgb, var(--muted) 80%, transparent) transparent; }
-	/* fallback for older Chrome / Safari */
 	#panel::-webkit-scrollbar { width: 6px; }
 	#panel::-webkit-scrollbar-track { background: transparent; }
-	#panel::-webkit-scrollbar-thumb { background: var(--line); border-radius: 0; }
+	#panel::-webkit-scrollbar-thumb { background: var(--line); }
 	#panel::-webkit-scrollbar-thumb:hover { background: var(--pumpkin); }
 	.title-row { display: flex; align-items: flex-start; gap: 10px; }
 	h1 {
@@ -148,19 +137,18 @@
 	.sub { color: var(--muted); margin: 0 0 4px; line-height: 1.45; font-size: 13px; }
 	.byline { color: var(--muted); font-size: 10px; font-style: italic; margin: 0 0 14px; }
 
-	.var { padding: 9px 0; border-top: 1px dashed var(--line); }
+	.var { padding: 9px 0 7px; border-top: 1px dashed var(--line); }
 	h2.group {
 		margin: 13px 0 0; padding-top: 11px; border-top: 1px solid var(--line);
 		font-size: 13px; font-weight: 700; font-style: italic; color: var(--accent);
 		text-decoration: underline; text-underline-offset: 3px;
 	}
-	h2.group + .var { border-top: none; padding-top: 5px; }
+	h2.group + .var { border-top: none; padding-top: 9px; }
 	.var-head { display: flex; align-items: baseline; gap: 8px; font-size: 13px; }
 	.var-name { font-weight: 700; flex: 1; }
 	.var-weight { font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 600; min-width: 38px; text-align: right; }
 	.var-desc { color: var(--muted); font-size: 11px; margin: 1px 0 5px; }
 
-	/* pumpkin slider: filled track up to --p, emoji thumb that changes with the weight */
 	input[type=range] {
 		-webkit-appearance: none; appearance: none; width: 100%; height: 22px; margin: 0;
 		background: transparent; cursor: pointer;
@@ -187,7 +175,7 @@
 	}
 
 	.legend { margin: 0 0 2px; }
-	.ramp { height: 10px; border-radius: 0; }
+	.ramp { height: 10px; }
 	.ramp-labels { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; margin-top: 4px; }
 	.note { color: var(--muted); font-size: 11px; line-height: 1.5; margin: 4px 0 0; padding-top: 12px; border-top: 1px solid var(--line); }
 	.note a { color: var(--muted); }
