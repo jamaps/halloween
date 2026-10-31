@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="./favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script>
+			// apply the saved theme before first paint
+			try { const t = localStorage.getItem("tot-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+		</script>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-XB09CWTEWB"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-XB09CWTEWB');
+		</script>
+		<link href="./_app/immutable/entry/start.CE2Khg-6.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/CsALM7om.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/QiCYqAWL.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/xdP_Kn1i.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/-UyI9lYi.js" rel="modulepreload">
+		<link href="./_app/immutable/entry/app._WiiaGD3.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DfR7o3H2.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/D6Bhh3GU.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BW24pMh_.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/Dre33V1q.js" rel="modulepreload">
+		<link href="./_app/immutable/nodes/0.B5cKVBGu.js" rel="modulepreload">
+		<link href="./_app/immutable/nodes/3.CClE8nTO.js" rel="modulepreload">
+		<!--1j3458h--><meta name="description" content="Pick what matters to you (flat streets, demographics, sidewalks, etc.) and see which residential parts of Toronto come out on top."/> <link rel="canonical" href="https://jamaps.github.io/halloween/toronto-map"/> <meta property="og:type" content="website"/> <meta property="og:url" content="https://jamaps.github.io/halloween/toronto-map"/> <meta property="og:title" content="Where to Trick or Treat in Toronto?"/> <meta property="og:description" content="Pick what matters to you (flat streets, demographics, sidewalks, etc.) and see which residential parts of Toronto come out on top."/> <meta property="og:image" content="https://jamaps.github.io/halloween/toronto-map-card.png"/> <meta property="og:image:width" content="1912"/> <meta property="og:image:height" content="961"/> <meta property="og:image:alt" content="Map of Toronto with residential areas shaded from purple to bright yellow by trick-or-treating score"/> <meta name="twitter:card" content="summary_large_image"/> <link rel="preconnect" href="https://fonts.googleapis.com"/> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/> <link href="https://fonts.googleapis.com/css2?family=Creepster&amp;family=Open+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><!----><title>Where to Trick or Treat in Toronto?</title>
+		<link href="./_app/immutable/assets/3.kj_FuGd8.css" rel="stylesheet">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[0--><!--[--><!--[--><div id="map" class="svelte-16zynbc"></div> <!--[0--><div id="loading" class="svelte-16zynbc">summoning hexes…</div><!--]--><!----> <div id="panel" class="svelte-1j3458h"><div class="title-row svelte-1j3458h"><h1 class="svelte-1j3458h">Where to Trick or Treat in Toronto?</h1> <button id="theme-toggle" title="light a candle / release the bats" class="svelte-1j3458h">🕯️</button></div> <p class="sub svelte-1j3458h">Select what matters to you: slide right to make something matter more. The sliders always add up to 100%, so you'll have to make a few tradeoffs. ⚖️🧙🍬</p> <p class="byline svelte-1j3458h">Built by Jeff Allen. Updated October 31, 2026</p> <div class="legend svelte-1j3458h"><div class="ramp svelte-1j3458h" style="background: linear-gradient(to right, #34204f 0%, #4a1c5e 28.000000000000004%, #7d2052 50%, #c2410c 70%, #f97316 82%, #fbbf24 90%, #fde68a 100%);"></div> <div class="ramp-labels svelte-1j3458h"><span>meh</span><span>better</span><span>great!</span></div></div> <div><!--[--><!--[0--><h2 class="group svelte-1j3458h">Demographics</h2><!--]--> <div class="var svelte-1j3458h"><div class="var-head svelte-1j3458h"><span class="var-name svelte-1j3458h">Kid density</span> <span class="var-weight svelte-1j3458h">7%</span></div> <div class="var-desc svelte-1j3458h" id="desc-kids_5_14_km2">More kids per km² (more fun? more competition?)</div> <input type="range" min="0" max="100" step="1" class="svelte-1j3458h" value="7" aria-label="Kid density" aria-describedby="desc-kids_5_14_km2" aria-valuetext="7%" style="--p: 7%;"/></div><!--[-1--><!--]--> <div class="var svelte-1j3458h"><div class="var-head svelte-1j3458h"><span class="var-name svelte-1j3458h">Family households</span> <span class="var-weight svelte-1j3458h">7%</span></div> <div class="var-desc svelte-1j3458h" id="desc-hh_kids_pct">% of households with children (more decorations?)</div> <input type="range" min="0" max="100" step="1" class="svelte-1j3458h" value="7" aria-label="Family households" aria-describedby="desc-hh_kids_pct" aria-valuetext="7%" style="--p: 7%;"/></div><!--[-1--><!--]--> <div class="var svelte-1j3458h"><div class="var-head svelte-1j3458h"><span class="var-name svelte-1j3458h">Household income</span> <span class="var-weight svelte-1j3458h">2%</span></div> <div class="var-desc svelte-1j3458h" id="desc-income">More full-size bars?</div> <input type="range" min="0" max="100" step="1" class="svelte-1j3458h" value="2" aria-label="Household income" aria-describedby="desc-income" aria-valuetext="2%" style="--p: 2%;"/></div><!--[0--><h2 class="group svelte-1j3458h">Geography</h2><!--]--> <div class="var svelte-1j3458h"><div class="var-head svelte-1j3458h"><span class="var-name svelte-1j3458h">Small lots</span> <span class="var-weight svelte-1j3458h">10%</span></div> <div class="var-desc svelte-1j3458h" id="desc-parcel_mean_m2">Smaller lots = more doors per minute?</div> <input type="range" min="0" max="100" step="1" class="svelte-1j3458h" value="10" aria-label="Small lots" aria-describedby="desc-parcel_mean_m2" aria-valuetext="10%" style="--p: 10%;"/></div><!--[-1--><!--]--> <div class="var svelte-1j3458h"><div class="var-head svelte-1j3458h"><span class="var-name svelte-1j3458h">Flat terrain</span> <span class="var-weight svelte-1j3458h">25%</span></div> <div class="var-desc svelte-1j3458h" id="desc-slope_res_pct">Fewer hills = less tired legs?</div> <input type="range" min="0" max="100" step="1" class="zombie svelte-1j3458h" value="25" aria-label="Flat terrain" aria-describedby="desc-slope_res_pct" aria-valuetext="25%" style="--p: 25%;"/></div><!--[0--><h2 class="group svelte-1j3458h">Traffic safety</h2><!--]--> <div class="var svelte-1j3458h"><div class="var-head svelte-1j3458h"><span class="var-name svelte-1j3458h">Sidewalks</span> <span class="var-weight svelte-1j3458h">30%</span></div> <div class="var-desc svelte-1j3458h" id="desc-sidewalk_pct">More streets with sidewalks on both sides</div> <input type="range" min="0" max="100" step="1" class="zombie svelte-1j3458h" value="30" aria-label="Sidewalks" aria-describedby="desc-sidewalk_pct" aria-valuetext="30%" style="--p: 30%;"/></div><!--[-1--><!--]--> <div class="var svelte-1j3458h"><div class="var-head svelte-1j3458h"><span class="var-name svelte-1j3458h">Car trips</span> <span class="var-weight svelte-1j3458h">20%</span></div> <div class="var-desc svelte-1j3458h" id="desc-car_pct">% of local residents' trips by car (fewer cars = safer streets)</div> <input type="range" min="0" max="100" step="1" class="svelte-1j3458h" value="20" aria-label="Car trips" aria-describedby="desc-car_pct" aria-valuetext="20%" style="--p: 20%;"/></div><!--]--></div> <p class="note svelte-1j3458h">This is a just-for-fun Halloween map, so please don't take it too seriously. Every neighbourhood has its own tricks and treats that aren't captured by this data. 👻 <br/><br/> Each hex averages data in the area within 500m of it, about a 10-minute walk. The hexes cover residential zones only (R, RD, RS, RT, RM, RA, RAC in current or 2014 zoning). Colour = percentile of the weighted score. <br/><br/> Data sources: Statistics Canada (2021 Census of Population, dissemination areas);
+		City of Toronto Open Data (zoning by-law, property boundaries, neighbourhoods, pedestrian network, 2023 TIN);
+		Transportation Tomorrow Survey 2022; basemap and labels © OpenStreetMap contributors. <br/><br/> Data and details are on <a href="https://github.com/jamaps/halloween" target="_blank" rel="noopener" class="svelte-1j3458h">GitHub</a>.</p></div><!--]--><!----><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_w6fnsn = {
+						base: new URL(".", location).pathname.slice(0, -1),
+						assets: "/halloween"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("./_app/immutable/entry/start.CE2Khg-6.js"),
+						import("./_app/immutable/entry/app._WiiaGD3.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 3],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
