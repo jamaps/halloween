@@ -5,8 +5,13 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<script>
-			// apply the saved theme before first paint
-			try { const t = localStorage.getItem("tot-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+			// apply the theme before first paint: the saved choice, else light only in the
+			// daytime (7am-6pm local) for visitors whose system isn't set to dark
+			try {
+				const h = new Date().getHours();
+				const day = h >= 7 && h < 18 && !matchMedia("(prefers-color-scheme: dark)").matches;
+				document.documentElement.dataset.theme = localStorage.getItem("tot-theme") || (day ? "light" : "dark");
+			} catch (e) {}
 		</script>
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-XB09CWTEWB"></script>
 		<script>
