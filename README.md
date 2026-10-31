@@ -2,7 +2,7 @@
 
 Fun Halloween map to help find your optimal trick-or-treating neighbourhood.
 
-## How it works
+## How it was built
 
 First created a grid of hexagons (100m apart) across the city, and only kept hexes where at least 10% of the hex is zoned residential (R, RD, RS, RT, RM, RA, or RAC). 
 
