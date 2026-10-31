@@ -1,0 +1,1 @@
+import{R as t}from"../chunks/-UyI9lYi.js";import{b as r}from"../chunks/Dvix8X8X.js";function n(o,e){throw new t(o,e.toString())}function a(){n(307,`${r}/toronto-map`)}const l=Object.freeze(Object.defineProperty({__proto__:null,load:a},Symbol.toStringTag,{value:"Module"}));export{l as universal};

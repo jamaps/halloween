@@ -70,7 +70,7 @@
 		<h1>Where to Trick or Treat in Toronto?</h1>
 		<button id="theme-toggle" title="light a candle / release the bats" on:click={toggleTheme}>{THEMES[theme].icon}</button>
 	</div>
-	<p class="sub">Select what matters to you: slide right to make something matter more. The sliders always add up to 100%, so you'll have to make a few tradeoffs. ⚖️🧙🍬</p>
+	<p class="sub">Select what matters to you. Slide right to make something matter more. The sliders always add up to 100%, so you'll have to make a few tradeoffs.</p>
 	<p class="byline">Built by Jeff Allen. Updated October 31, 2026</p>
 
 	<div class="legend">
